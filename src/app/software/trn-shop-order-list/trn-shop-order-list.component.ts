@@ -64,6 +64,9 @@ export class TrnShopOrderListComponent implements OnInit {
 
   public isProgressBarHidden = false;
 
+  public shopOrderImportModalRef: BsModalRef;
+  public shopOrderConfirmApplyModalRef: BsModalRef;
+
   // Combo box for number of rows
   public createCboShowNumberOfRows(): void {
     for (var i = 0; i <= 4; i++) {
@@ -248,8 +251,13 @@ export class TrnShopOrderListComponent implements OnInit {
   }
 
   // Import shop order
-  public btnImportShopOrderClick(): void {
+  public btnImportShopOrderClick(shopOrderImportModalTemplate: TemplateRef<any>): void {
+    this.shopOrderImportModalRef = this.modalService.show(shopOrderImportModalTemplate, { class: "modal-xl" });
+  }
 
+  // Apply shop order
+  public btnApplyImportShopOrderClick(shopOrderConfirmApplyModalTemplate: TemplateRef<any>) {
+    this.shopOrderConfirmApplyModalRef = this.modalService.show(shopOrderConfirmApplyModalTemplate, { class: "modal-sm" });
   }
 
   // Add shop order

@@ -24,7 +24,7 @@
             </div>
           </td>
           <td style="text-align: right;">
-            <button class="btn btn-primary" [hidden]="isAddButtonHide" style="margin-right: 5px;" (click)="btnImportShopOrderClick()">
+            <button class="btn btn-primary" [hidden]="isAddButtonHide" style="margin-right: 5px;" (click)="btnImportShopOrderClick(shopOrderImportModalTemplate)">
               <fa name="download"></fa> Import
             </button>
             <button class="btn btn-primary" [hidden]="isAddButtonHide" style="margin-right: 5px;" (click)="btnAddShopOrderClick()"
@@ -211,6 +211,74 @@
         <fa name="trash"></fa> Delete
       </button>
       <button type="button" class="btn" (click)="shopOrderDeleteModalRef.hide()" id="btnCloseConfirmDeleteShopOrderModal">
+        <fa name="close"></fa> Cancel
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Shop order import modal -->
+  <ng-template #shopOrderImportModalTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title">
+        Import
+      </h4>
+    </div>
+    <div class="modal-body">
+      <table border="0" style="width: 100%; border: none;">
+        <tr>
+          <td style="width: 15%;">
+            <div class="form-group">
+              <button type="button" class="btn btn-success btn-block">
+                <fa name="download"></fa> Download Template
+              </button>
+            </div>
+          </td>
+          <td style="width: 1%;"></td>
+          <td style="width: 84%;">
+            <div class="form-group">
+              <input type="file" class="form-control">
+            </div>
+          </td>
+        </tr>
+      </table>
+      <wj-flex-grid #importedCSVFlexGrid [itemsSource]="importedCSVCollectionView" [selectionMode]="3" style="height: 400px;">
+        <wj-flex-grid-filter></wj-flex-grid-filter>
+        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
+    <div class="modal-footer">
+      <button type="button" [hidden]="isAddButtonHide" class="btn btn-primary" style="margin-right: 5px;" (click)="btnApplyImportShopOrderClick(shopOrderConfirmApplyModalTemplate)"
+        id="btnApplyImportShopOrder">
+        <fa name="download"></fa> Apply
+      </button>
+      <button type="button" class="btn" (click)="shopOrderImportModalRef.hide()" id="btnCloseImportShopOrder">
+        <fa name="close"></fa> Cancel
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Shop order confirm apply modal -->
+  <ng-template #shopOrderConfirmApplyModalTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title">
+        Apply
+      </h4>
+    </div>
+    <div class="modal-body">
+      Are you sure you want to apply this imported file?
+    </div>
+    <div class="modal-footer">
+      <button type="button" [hidden]="isAddButtonHide" class="btn btn-primary" style="margin-right: 5px;" (click)="btnConfirmApplyShopOrderStatusClick()"
+        id="btnConfirmDeleteShopOrder">
+        <fa name="download"></fa> Apply
+      </button>
+      <button type="button" class="btn" (click)="shopOrderConfirmApplyModalRef.hide()" id="btnCloseConfirmApplyShopOrderModal">
         <fa name="close"></fa> Cancel
       </button>
     </div>
