@@ -261,6 +261,12 @@ export class TrnShopOrderListComponent implements OnInit {
 
     this.importedCSVObservableArray = new ObservableArray();
     this.importedCSVCollectionView = new CollectionView(this.importedCSVObservableArray);
+
+    let btnApplyImportShopOrder: Element = document.getElementById("btnApplyImportShopOrder");
+    (<HTMLButtonElement>btnApplyImportShopOrder).disabled = true;
+    if (this.importedCSVCollectionView.items.length > 0) {
+      (<HTMLButtonElement>btnApplyImportShopOrder).disabled = false;
+    }
   }
 
   // Apply shop order
@@ -273,27 +279,31 @@ export class TrnShopOrderListComponent implements OnInit {
     let btnConfirmApplyShopOrderStatus: Element = document.getElementById("btnConfirmApplyShopOrderStatus");
     (<HTMLButtonElement>btnConfirmApplyShopOrderStatus).disabled = true;
 
-    this.trnShopOrderListService.importShopOrder(JSON.stringify(this.importedCSVCollectionView.items));
-    this.importShopOrderSubscription = this.trnShopOrderListService.importShopOrderObservable.subscribe(
-      data => {
-        if (data[0] == "success") {
-          this.toastr.success("Shop orders were successfully imported.", "Success");
+    if (this.importedCSVCollectionView.items.length > 0) {
+      this.trnShopOrderListService.importShopOrder(JSON.stringify(this.importedCSVCollectionView.items));
+      this.importShopOrderSubscription = this.trnShopOrderListService.importShopOrderObservable.subscribe(
+        data => {
+          if (data[0] == "success") {
+            this.toastr.success("Shop orders were successfully imported.", "Success");
 
-          this.shopOrderConfirmApplyModalRef.hide();
-          setTimeout(() => {
-            this.shopOrderImportModalRef.hide();
-            this.listShopOrder();
-          }, 500);
+            this.shopOrderConfirmApplyModalRef.hide();
+            setTimeout(() => {
+              this.shopOrderImportModalRef.hide();
+              this.listShopOrder();
+            }, 500);
 
-        } else if (data[0] == "failed") {
-          this.toastr.error(data[1], "Error");
+          } else if (data[0] == "failed") {
+            this.toastr.error(data[1], "Error");
 
-          (<HTMLButtonElement>btnConfirmApplyShopOrderStatus).disabled = false;
+            (<HTMLButtonElement>btnConfirmApplyShopOrderStatus).disabled = false;
+          }
+
+          if (this.importShopOrderSubscription != null) this.importShopOrderSubscription.unsubscribe();
         }
-
-        if (this.importShopOrderSubscription != null) this.importShopOrderSubscription.unsubscribe();
-      }
-    );
+      );
+    } else {
+      this.toastr.error("Grid is empty.", "Error");
+    }
   }
 
   // Change file listener
@@ -332,12 +342,24 @@ export class TrnShopOrderListComponent implements OnInit {
           this.isLoadingImportCSVSpinnerHidden = true;
           this.importedCSVObservableArray = dataLines;
           this.importedCSVCollectionView = new CollectionView(this.importedCSVObservableArray);
+
+          let btnApplyImportShopOrder: Element = document.getElementById("btnApplyImportShopOrder");
+          (<HTMLButtonElement>btnApplyImportShopOrder).disabled = true;
+          if (this.importedCSVCollectionView.items.length > 0) {
+            (<HTMLButtonElement>btnApplyImportShopOrder).disabled = false;
+          }
         }, 500);
       }
     } else {
       this.isLoadingImportCSVSpinnerHidden = true;
       this.importedCSVObservableArray = new ObservableArray();
       this.importedCSVCollectionView = new CollectionView(this.importedCSVObservableArray);
+
+      let btnApplyImportShopOrder: Element = document.getElementById("btnApplyImportShopOrder");
+      (<HTMLButtonElement>btnApplyImportShopOrder).disabled = true;
+      if (this.importedCSVCollectionView.items.length > 0) {
+        (<HTMLButtonElement>btnApplyImportShopOrder).disabled = false;
+      }
     }
   }
 
