@@ -236,20 +236,22 @@
           <td style="width: 1%;"></td>
           <td style="width: 84%;">
             <div class="form-group">
-              <input type="file" class="form-control">
+              <input type="file" class="form-control" (change)="changeListener($event.target.files)">
             </div>
           </td>
         </tr>
       </table>
-      <wj-flex-grid #importedCSVFlexGrid [itemsSource]="importedCSVCollectionView" [selectionMode]="3" style="height: 400px;">
+      <mat-progress-bar [hidden]="isLoadingImportCSVSpinnerHidden" [color]="'primary'" [mode]="'indeterminate'"></mat-progress-bar>
+      <wj-flex-grid #importedCSVFlexGrid [itemsSource]="importedCSVCollectionView" style="height: 400px;">
         <wj-flex-grid-filter></wj-flex-grid-filter>
-        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="''" [binding]="''" [isReadOnly]="true" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="'Date'" [binding]="'SPDate'" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="'Item Code'" [binding]="'ItemCode'" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="'Quantity'" [binding]="'Quantity'" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="'Amount'" [binding]="'Amount'" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="'Group Code'" [binding]="'ShopGroupCode'" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="'Particulars'" [binding]="'Particulars'" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="'Status Code'" [binding]="'ShopOrderStatusCode'" [width]="'1*'"></wj-flex-grid-column>
+        <wj-flex-grid-column [header]="'Status Date'" [binding]="'ShopOrderStatusDate'" [width]="'1*'"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
     <div class="modal-footer">
@@ -275,7 +277,7 @@
     </div>
     <div class="modal-footer">
       <button type="button" [hidden]="isAddButtonHide" class="btn btn-primary" style="margin-right: 5px;" (click)="btnConfirmApplyShopOrderStatusClick()"
-        id="btnConfirmDeleteShopOrder">
+        id="btnConfirmApplyShopOrderStatus">
         <fa name="download"></fa> Apply
       </button>
       <button type="button" class="btn" (click)="shopOrderConfirmApplyModalRef.hide()" id="btnCloseConfirmApplyShopOrderModal">

@@ -47,6 +47,7 @@ export class TrnShopOrderListComponent implements OnInit {
   public listShopPageIndex: number = 15;
   @ViewChild('listShopOrderFlexGrid') listShopOrderFlexGrid: WjFlexGrid;
 
+  public importShopOrderSubscription: any;
   public addShopOrderSubscription: any;
   public deleteShopOrderSubscription: any;
   public shopOrderDeleteModalRef: BsModalRef;
@@ -66,6 +67,10 @@ export class TrnShopOrderListComponent implements OnInit {
 
   public shopOrderImportModalRef: BsModalRef;
   public shopOrderConfirmApplyModalRef: BsModalRef;
+
+  public importedCSVObservableArray: ObservableArray = new ObservableArray();
+  public importedCSVCollectionView: CollectionView = new CollectionView(this.importedCSVObservableArray);
+  public isLoadingImportCSVSpinnerHidden: boolean = true;
 
   // Combo box for number of rows
   public createCboShowNumberOfRows(): void {
@@ -253,11 +258,87 @@ export class TrnShopOrderListComponent implements OnInit {
   // Import shop order
   public btnImportShopOrderClick(shopOrderImportModalTemplate: TemplateRef<any>): void {
     this.shopOrderImportModalRef = this.modalService.show(shopOrderImportModalTemplate, { class: "modal-xl" });
+
+    this.importedCSVObservableArray = new ObservableArray();
+    this.importedCSVCollectionView = new CollectionView(this.importedCSVObservableArray);
   }
 
   // Apply shop order
   public btnApplyImportShopOrderClick(shopOrderConfirmApplyModalTemplate: TemplateRef<any>) {
     this.shopOrderConfirmApplyModalRef = this.modalService.show(shopOrderConfirmApplyModalTemplate, { class: "modal-sm" });
+  }
+
+  // Confirm apply shop order
+  public btnConfirmApplyShopOrderStatusClick() {
+    let btnConfirmApplyShopOrderStatus: Element = document.getElementById("btnConfirmApplyShopOrderStatus");
+    (<HTMLButtonElement>btnConfirmApplyShopOrderStatus).disabled = true;
+
+    this.trnShopOrderListService.importShopOrder(JSON.stringify(this.importedCSVCollectionView.items));
+    this.importShopOrderSubscription = this.trnShopOrderListService.importShopOrderObservable.subscribe(
+      data => {
+        if (data[0] == "success") {
+          this.toastr.success("Shop orders were successfully imported.", "Success");
+
+          this.shopOrderConfirmApplyModalRef.hide();
+          setTimeout(() => {
+            this.shopOrderImportModalRef.hide();
+            this.listShopOrder();
+          }, 500);
+
+        } else if (data[0] == "failed") {
+          this.toastr.error(data[1], "Error");
+
+          (<HTMLButtonElement>btnConfirmApplyShopOrderStatus).disabled = false;
+        }
+
+        if (this.importShopOrderSubscription != null) this.importShopOrderSubscription.unsubscribe();
+      }
+    );
+  }
+
+  // Change file listener
+  public changeListener(files: FileList) {
+    this.isLoadingImportCSVSpinnerHidden = false;
+
+    if (files && files.length > 0) {
+      let file: File = files.item(0);
+
+      let reader: FileReader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (e) => {
+        let csv: any = reader.result;
+        let csvlines = csv.split(/\r|\n|\r/);
+
+        let headers = csvlines[0].split(',');
+        let dataLines: ObservableArray = new ObservableArray();
+
+        for (let i = 1; i < csvlines.length; i++) {
+          let data = csvlines[i].split(',');
+          if (data.length === headers.length) {
+            dataLines.push({
+              SPDate: data[0],
+              ItemCode: data[1],
+              Quantity: data[2],
+              Amount: data[3],
+              ShopGroupCode: data[4],
+              Particulars: data[5],
+              ShopOrderStatusCode: data[6],
+              ShopOrderStatusDate: data[7]
+            });
+          }
+        }
+
+        setTimeout(() => {
+          this.isLoadingImportCSVSpinnerHidden = true;
+          this.importedCSVObservableArray = dataLines;
+          this.importedCSVCollectionView = new CollectionView(this.importedCSVObservableArray);
+        }, 500);
+      }
+    } else {
+      this.isLoadingImportCSVSpinnerHidden = true;
+      this.importedCSVObservableArray = new ObservableArray();
+      this.importedCSVCollectionView = new CollectionView(this.importedCSVObservableArray);
+    }
   }
 
   // Add shop order
@@ -373,6 +454,7 @@ export class TrnShopOrderListComponent implements OnInit {
     if (this.cboShopGroupSubscription != null) this.cboShopGroupSubscription.unsubscribe();
     if (this.cboShopOrderStatusSubscription != null) this.cboShopOrderStatusSubscription.unsubscribe();
     if (this.listShopOrderSubscription != null) this.listShopOrderSubscription.unsubscribe();
+    if (this.importShopOrderSubscription != null) this.importShopOrderSubscription.unsubscribe();
     if (this.addShopOrderSubscription != null) this.addShopOrderSubscription.unsubscribe();
     if (this.deleteShopOrderSubscription != null) this.deleteShopOrderSubscription.unsubscribe();
     if (this.getUserFormsSubscription != null) this.getUserFormsSubscription.unsubscribe();

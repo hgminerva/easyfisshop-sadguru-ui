@@ -29,6 +29,8 @@ export class TrnShopOrderListService {
   public listShopOrderStatusObservable = this.listShopOrderStatusSource.asObservable();
   public listShopOrderSource = new Subject<ObservableArray>();
   public listShopOrderObservable = this.listShopOrderSource.asObservable();
+  public importShopOrderSource = new Subject<string[]>();
+  public importShopOrderObservable = this.importShopOrderSource.asObservable();
   public addShopOrderSource = new Subject<string[]>();
   public addShopOrderObservable = this.addShopOrderSource.asObservable();
   public deleteShopOrderSource = new Subject<string[]>();
@@ -110,6 +112,20 @@ export class TrnShopOrderListService {
         this.listShopOrderSource.next(listShopOrderObservableArray);
       }
     );
+  }
+
+  // Import shop order 
+  public importShopOrder(shopOrderList: string): void {
+    this.httpClient.post(this.defaultAPIURLHost + "/api/shopOrder/import", shopOrderList, this.options).subscribe(
+      response => {
+        let responseResults: string[] = ["success", ""];
+        this.importShopOrderSource.next(responseResults);
+      },
+      error => {
+        let errorResults: string[] = ["failed", error["error"]];
+        this.importShopOrderSource.next(errorResults);
+      }
+    )
   }
 
   // Add shop order 
