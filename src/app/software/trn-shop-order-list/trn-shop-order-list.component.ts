@@ -320,35 +320,52 @@ export class TrnShopOrderListComponent implements OnInit {
         let csvlines = csv.split(/\r|\n|\r/);
 
         let headers = csvlines[0].split(',');
-        let dataLines: ObservableArray = new ObservableArray();
 
-        for (let i = 1; i < csvlines.length; i++) {
-          let data = csvlines[i].split(',');
-          if (data.length === headers.length) {
-            dataLines.push({
-              SPDate: data[0],
-              ItemCode: data[1],
-              Quantity: data[2],
-              Amount: data[3],
-              ShopGroupCode: data[4],
-              Particulars: data[5],
-              ShopOrderStatusCode: data[6],
-              ShopOrderStatusDate: data[7]
-            });
-          }
-        }
-
-        setTimeout(() => {
+        if (
+          headers[0] !== "Date" ||
+          headers[1] !== "Item Code" ||
+          headers[2] !== "Quantity" ||
+          headers[3] !== "Amount" ||
+          headers[4] !== "Group Code" ||
+          headers[5] !== "Particulars" ||
+          headers[6] !== "Status Code" ||
+          headers[7] !== "Status Date"
+        ) {
+          this.toastr.error("Invalid Template", "Error");
           this.isLoadingImportCSVSpinnerHidden = true;
-          this.importedCSVObservableArray = dataLines;
-          this.importedCSVCollectionView = new CollectionView(this.importedCSVObservableArray);
+        } else {
+          let dataLines: ObservableArray = new ObservableArray();
 
-          let btnApplyImportShopOrder: Element = document.getElementById("btnApplyImportShopOrder");
-          (<HTMLButtonElement>btnApplyImportShopOrder).disabled = true;
-          if (this.importedCSVCollectionView.items.length > 0) {
-            (<HTMLButtonElement>btnApplyImportShopOrder).disabled = false;
+          for (let i = 1; i < csvlines.length; i++) {
+            let data = csvlines[i].split(',');
+            if (data.length === headers.length) {
+              dataLines.push({
+                SPDate: data[0],
+                ItemCode: data[1],
+                Quantity: data[2],
+                Amount: data[3],
+                ShopGroupCode: data[4],
+                Particulars: data[5],
+                ShopOrderStatusCode: data[6],
+                ShopOrderStatusDate: data[7]
+              });
+            }
           }
-        }, 500);
+
+          setTimeout(() => {
+            this.isLoadingImportCSVSpinnerHidden = true;
+            this.importedCSVObservableArray = dataLines;
+            this.importedCSVCollectionView = new CollectionView(this.importedCSVObservableArray);
+
+            let btnApplyImportShopOrder: Element = document.getElementById("btnApplyImportShopOrder");
+            (<HTMLButtonElement>btnApplyImportShopOrder).disabled = true;
+            if (this.importedCSVCollectionView.items.length > 0) {
+              (<HTMLButtonElement>btnApplyImportShopOrder).disabled = false;
+            }
+
+            this.toastr.success("CSV load successful", "Success");
+          }, 500);
+        }
       }
     } else {
       this.isLoadingImportCSVSpinnerHidden = true;
