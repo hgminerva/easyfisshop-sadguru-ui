@@ -326,10 +326,7 @@ export class TrnShopOrderListComponent implements OnInit {
           headers[1] !== "Item Code" ||
           headers[2] !== "Quantity" ||
           headers[3] !== "Amount" ||
-          headers[4] !== "Group Code" ||
-          headers[5] !== "Particulars" ||
-          headers[6] !== "Status Code" ||
-          headers[7] !== "Status Date"
+          headers[4] !== "Particulars"
         ) {
           this.toastr.error("Invalid Template", "Error");
           this.isLoadingImportCSVSpinnerHidden = true;
@@ -344,10 +341,7 @@ export class TrnShopOrderListComponent implements OnInit {
                 ItemCode: data[1],
                 Quantity: data[2],
                 Amount: data[3],
-                ShopGroupCode: data[4],
-                Particulars: data[5],
-                ShopOrderStatusCode: data[6],
-                ShopOrderStatusDate: data[7]
+                Particulars: data[4]
               });
             }
           }

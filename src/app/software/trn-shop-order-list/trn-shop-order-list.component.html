@@ -47,7 +47,7 @@
             <div class="form-group">
               <small for="inpUsername">Start Date </small>
               <wj-input-date #cboShopOrderStartDateFilter [(ngModel)]="shopOrderStartDateFilterData" [ngModelOptions]="{standalone: true}"
-                (textChanged)="startDateTextChanged()" format="MM-dd-yyyy" style="width: 100%;">
+                (textChanged)="startDateTextChanged()" format="yyyy-MM-dd" style="width: 100%;">
               </wj-input-date>
             </div>
           </td>
@@ -55,7 +55,7 @@
             <div class="form-group">
               <small for="inpUsername">End Date </small>
               <wj-input-date #cboShopOrderEndDateFilter [(ngModel)]="shopOrderEndDateFilterData" [ngModelOptions]="{standalone: true}"
-                (textChanged)="endDateTextChanged()" format="MM-dd-yyyy" style="width: 100%;">
+                (textChanged)="endDateTextChanged()" format="yyyy-MM-dd" style="width: 100%;">
               </wj-input-date>
             </div>
           </td>
@@ -248,10 +248,7 @@
         <wj-flex-grid-column [header]="'Item Code'" [binding]="'ItemCode'" [width]="'1*'"></wj-flex-grid-column>
         <wj-flex-grid-column [header]="'Quantity'" [binding]="'Quantity'" [width]="'1*'"></wj-flex-grid-column>
         <wj-flex-grid-column [header]="'Amount'" [binding]="'Amount'" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="'Group Code'" [binding]="'ShopGroupCode'" [width]="'1*'"></wj-flex-grid-column>
         <wj-flex-grid-column [header]="'Particulars'" [binding]="'Particulars'" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="'Status Code'" [binding]="'ShopOrderStatusCode'" [width]="'1*'"></wj-flex-grid-column>
-        <wj-flex-grid-column [header]="'Status Date'" [binding]="'ShopOrderStatusDate'" [width]="'1*'"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
     <div class="modal-footer">
