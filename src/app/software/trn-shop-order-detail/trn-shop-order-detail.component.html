@@ -42,7 +42,7 @@
             <label for="" class="col-sm-4 col-form-label form-group-label">Order No.</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" [(ngModel)]="trnShopOrderDetailModel.SPNumber" id="" placeholder="SP Number..."
-                disabled>
+                [disabled]="isLocked">
             </div>
             <br /><br />
             <label for="" class="col-sm-4 col-form-label form-group-label">Date</label>

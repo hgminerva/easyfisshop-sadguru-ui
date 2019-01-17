@@ -323,10 +323,11 @@ export class TrnShopOrderListComponent implements OnInit {
 
         if (
           headers[0] !== "Date" ||
-          headers[1] !== "Item Code" ||
-          headers[2] !== "Quantity" ||
-          headers[3] !== "Amount" ||
-          headers[4] !== "Particulars"
+          headers[1] !== "Order Number" ||
+          headers[2] !== "Item Code" ||
+          headers[3] !== "Quantity" ||
+          headers[4] !== "Amount" ||
+          headers[5] !== "Particulars"
         ) {
           this.toastr.error("Invalid Template", "Error");
           this.isLoadingImportCSVSpinnerHidden = true;
@@ -338,10 +339,11 @@ export class TrnShopOrderListComponent implements OnInit {
             if (data.length === headers.length) {
               dataLines.push({
                 SPDate: data[0],
-                ItemCode: data[1],
-                Quantity: data[2],
-                Amount: data[3],
-                Particulars: data[4]
+                SPNumber: data[1],
+                ItemCode: data[2],
+                Quantity: data[3],
+                Amount: data[4],
+                Particulars: data[5]
               });
             }
           }

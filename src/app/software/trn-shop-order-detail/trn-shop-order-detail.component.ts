@@ -275,6 +275,8 @@ export class TrnShopOrderDetailComponent implements OnInit {
           }, 500);
         } else if (data[0] == "failed") {
           this.toastr.error(data[1], "Error");
+
+          (<HTMLButtonElement>btnLockShopOrder).disabled = false;
         }
 
         if (this.lockShopOrderSubscription != null) this.lockShopOrderSubscription.unsubscribe();
@@ -303,6 +305,8 @@ export class TrnShopOrderDetailComponent implements OnInit {
           }, 500);
         } else if (data[0] == "failed") {
           this.toastr.error(data[1], "Error");
+
+          (<HTMLButtonElement>btnUnlockShopOrder).disabled = false;
         }
 
         if (this.unlockShopOrderSubscription != null) this.unlockShopOrderSubscription.unsubscribe();
